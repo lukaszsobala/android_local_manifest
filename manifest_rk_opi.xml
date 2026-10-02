@@ -5,7 +5,8 @@
   <!-- Orange Pi -->
 
   <!-- Orange Pi 5 Pro -->
-  <project path="device/opi/opi5_pro" name="dvab-sarma/android_device_opi_opi5_pro" remote="github" revision="android-17.0" >
+  <!-- Radxa ROCK 5A: forks of the Orange Pi 5 Pro device and boot-file repos -->
+  <project path="device/opi/opi5_pro" name="lukaszsobala/android_device_opi_opi5_pro" remote="github" revision="android-17.0-rock5a" >
     <linkfile src="mkimg_gpt.sh" dest="opi5_pro-mkimg.sh" />
   </project>
 
@@ -15,7 +16,7 @@
 
   <!-- </project> -->
   <!-- Orange Pi 5 pro kernel-->
-  <project path="device/opi/opi5_pro-kernel" name="dvab-sarma/android_device_opi_opi5_pro-kernel" remote="github" revision="android-17.0" />
+  <project path="device/opi/opi5_pro-kernel" name="lukaszsobala/android_device_opi_opi5_pro-kernel" remote="github" revision="android-17.0-rock5a" />
     <!-- Orange Pi 3b Kernel-->
   <!-- <project path="device/opi/opi3b-kernel" name="dvab-sarma/android_device_opi_opi3b-kernel" remote="github" revision="android-16.0" /> -->
 

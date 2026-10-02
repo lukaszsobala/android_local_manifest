@@ -2,6 +2,27 @@
 
 ***
 
+### Radxa ROCK 5A (Android TV) — this fork
+
+This branch points `device/opi/opi5_pro` and `device/opi/opi5_pro-kernel` at ROCK 5A forks
+(branch `android-17.0-rock5a`). The product names (`aosp_opi5_pro_tv`, `opi5_pro-mkimg.sh`) are unchanged.
+
+| Repo (fork) | Branch | ROCK 5A changes |
+|---|---|---|
+| [android_kernel_rk_opi](https://github.com/lukaszsobala/android_kernel_rk_opi/tree/android-17.0-6.18-rock5a) | `android-17.0-6.18-rock5a` | Ethernet (stmmac) built in, RTL8852BE Wi-Fi + BT for the Radxa A8 module, firmware in-tree, HDMI audio in the DTS |
+| [android_kernel_manifest](https://github.com/lukaszsobala/android_kernel_manifest/tree/android-17.0-rock5a) | `android-17.0-rock5a` | `common-android17-6.18` + the kernel fork above |
+| [android_device_opi_opi5_pro-kernel](https://github.com/lukaszsobala/android_device_opi_opi5_pro-kernel/tree/android-17.0-rock5a) | `android-17.0-rock5a` | Mainline U-Boot for ROCK 5A, ROCK 5A DTB, boot script that boots from SD or eMMC. See its `ROCK5A.md`. |
+| [android_device_opi_opi5_pro](https://github.com/lukaszsobala/android_device_opi_opi5_pro/tree/android-17.0-rock5a) | `android-17.0-rock5a` | Copies all DTBs to the boot partition, `IMGSIZE` override, Radxa branding |
+
+1. Build the kernel (see the kernel manifest README): `tools/bazel build --config=fast --config=stamp //common:opi5_pro`
+2. Copy `bazel-bin/common/opi5_pro/arch/arm64/boot/Image` and `.../dts/rockchip/rk3588s-rock-5a.dtb` into
+   `device/opi/opi5_pro-kernel/`, replacing the files there (commit them to the fork to keep them).
+3. Sync and build Android as below, using `https://raw.githubusercontent.com/lukaszsobala/android_local_manifest/ccr-c4aa7773-ghw425/manifest_rk_opi.xml` and `lunch aosp_opi5_pro_tv-cp2a-userdebug`.
+4. Make the image sized for your media, e.g. a 16 GB eMMC: `IMGSIZE=14GiB ./opi5_pro-mkimg.sh`
+5. Flash the `*_gpt.img` to SD (test) or eMMC. U-Boot tries SD before eMMC.
+
+***
+
 ### How to build (Ubuntu 24.04 LTS):
 
 1. Establish [Android build environment](https://source.android.com/docs/setup/start/requirements).
