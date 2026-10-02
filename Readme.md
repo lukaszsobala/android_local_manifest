@@ -18,8 +18,9 @@ This branch points `device/opi/opi5_pro` and `device/opi/opi5_pro-kernel` at ROC
 2. Copy `bazel-bin/common/opi5_pro/arch/arm64/boot/Image` and `.../dts/rockchip/rk3588s-rock-5a.dtb` into
    `device/opi/opi5_pro-kernel/`, replacing the files there (commit them to the fork to keep them).
 3. Sync and build Android as below, using `https://raw.githubusercontent.com/lukaszsobala/android_local_manifest/ccr-c4aa7773-ghw425/manifest_rk_opi.xml` and `lunch aosp_opi5_pro_tv-cp2a-userdebug`.
-4. Make the image sized for your media, e.g. a 16 GB eMMC: `IMGSIZE=14GiB ./opi5_pro-mkimg.sh`
+4. Make the image: `./opi5_pro-mkimg.sh` (8 GiB by default; set `IMGSIZE=...` for a bigger one).
 5. Flash the `*_gpt.img` to SD (test) or eMMC. U-Boot tries SD before eMMC.
+6. Grow userdata to fill the disk (Linux host, disk attached): `sudo device/opi/opi5_pro/grow_userdata.sh /dev/sdX`
 
 ***
 
