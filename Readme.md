@@ -26,6 +26,20 @@ This branch points `device/opi/opi5_pro` and `device/opi/opi5_pro-kernel` at ROC
 (1 = boot, 2 = system, 3 = vendor), e.g. `sudo dd if=$ANDROID_PRODUCT_OUT/system.img of=/dev/sdX2 bs=4M conv=fsync`.
 TWRP (`uRecovery`, `recovery=true` in `config.txt`) is not needed for this.
 
+**Status (tested on hardware, Oct 2026):** boots from SD, Ethernet, HDMI picture and sound work.
+Open issues:
+- Only `hdmi0` is enabled; the other port is `dp0` behind an on-board DP-to-HDMI converter. The `dw-dp` driver
+  is built in; enabling it needs `&dp0`, `&dp0_in`/`&vp2` endpoints and a connector in `rk3588s-rock-5a.dts`
+  (see `rk3588s-orangepi-5-pro-1.dts`). `usbdp_phy0` already has `rockchip,dp-lane-mux = <2 3>`.
+- Output is fixed at 1920x1080 by `vendor.hwc.drm.force_mode` in `vendor.prop` (hence no resolution menu).
+- AV1 doesn't play (same on the Orange Pi build): `c2.ffmpeg` has no software AV1 fallback (no libdav1d), so
+  any failure in the V4L2 request path (Hantro VPU981) is fatal. Needs logcat (`HWACCEL`/`C2FFMPEG`) and dmesg.
+- H.264 colours slightly off: `c2.ffmpeg` reports no colour aspects, and mainline VOP2 hard-codes BT.709
+  limited for YUV planes (no `COLOR_ENCODING` property). Compare with Developer options -> Disable HW overlays.
+- HEVC 10-bit HDR looks dark: frames are converted NV15 -> NV12 via RGA and HDR metadata is dropped, so
+  Android never tone-maps. Fix belongs in `external/ffmpeg_codec2` (report colour aspects; P010 + HDR info).
+- Wi-Fi/BT (Radxa A8) and eMMC boot not yet tested.
+
 **GApps (optional, not enabled):** to build them in, add
 `<remote name="gitlab" fetch="https://gitlab.com/" />` and
 `<project path="vendor/gapps_tv" name="MindTheGapps/vendor_gapps_tv" remote="gitlab" revision="cinnamonbun" clone-depth="1" />`
