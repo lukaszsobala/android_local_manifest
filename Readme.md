@@ -22,6 +22,18 @@ This branch points `device/opi/opi5_pro` and `device/opi/opi5_pro-kernel` at ROC
 5. Flash the `*_gpt.img` to SD (test) or eMMC. U-Boot tries SD before eMMC.
 6. Grow userdata to fill the disk (Linux host, disk attached): `sudo device/opi/opi5_pro/grow_userdata.sh /dev/sdX`
 
+**Updating later without wiping userdata:** write only the changed images to their partitions
+(1 = boot, 2 = system, 3 = vendor), e.g. `sudo dd if=$ANDROID_PRODUCT_OUT/system.img of=/dev/sdX2 bs=4M conv=fsync`.
+TWRP (`uRecovery`, `recovery=true` in `config.txt`) is not needed for this.
+
+**GApps (optional, not enabled):** to build them in, add
+`<remote name="gitlab" fetch="https://gitlab.com/" />` and
+`<project path="vendor/gapps_tv" name="MindTheGapps/vendor_gapps_tv" remote="gitlab" revision="cinnamonbun" clone-depth="1" />`
+to the local manifest, install `git-lfs` and run `git -C vendor/gapps_tv lfs pull` after syncing, then add
+`$(call inherit-product-if-exists, vendor/gapps_tv/arm64/arm64-vendor.mk)` to `aosp_opi5_pro_tv.mk` and rebuild.
+The path must be `vendor/gapps_tv`. Use the TV package, not the phone one. Uncertified devices can be registered
+at google.com/android/uncertified.
+
 ***
 
 ### How to build (Ubuntu 24.04 LTS):
